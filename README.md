@@ -2,6 +2,8 @@
 
 Package designed to select an item from a list, with the option to filter and even search the items online.
 
+<img src="screenshots/Screenshot_1.png" width="400" /> <img src="screenshots/Screenshot_2.png" width="400" />
+
 ## pubspec.yaml
 ```yaml
 select_dialog: <last version>
