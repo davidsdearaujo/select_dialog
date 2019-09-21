@@ -10,10 +10,10 @@ class SelectOneBloc<T> {
   Observable<List<T>> _filteredListOfflineOut;
 
   SelectOneBloc(List<T> items, this.onFind) {
-
     _list$ = BehaviorSubject.seeded(items);
 
-    _filteredListOfflineOut = Observable.combineLatest2(_list$, _filter$, filter);
+    _filteredListOfflineOut =
+        Observable.combineLatest2(_list$, _filter$, filter);
 
     _filteredListOnlineOut = _filter$
         .where((_) => onFind != null)
@@ -21,7 +21,8 @@ class SelectOneBloc<T> {
         .debounceTime(Duration(milliseconds: 500))
         .switchMap((val) => Observable.fromFuture(onFind(val)).startWith(null));
 
-    filteredListOut = Observable.merge([_filteredListOfflineOut, _filteredListOnlineOut]);
+    filteredListOut =
+        Observable.merge([_filteredListOfflineOut, _filteredListOnlineOut]);
   }
 
   void onTextChanged(String filter) {
