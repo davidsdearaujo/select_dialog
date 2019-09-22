@@ -31,6 +31,32 @@ SelectDialog.showModal<String>(
 );
 ```
 
+
+# Atenção
+Para utilizar um modelo como tipo de item, é necessário fazer as implementações de **toString**, **Equals** e **Hashcode**, conforme exemplo a seguir:
+
+```dart
+class UserModel {
+  final String id;
+  final DateTime createdAt;
+  final String name;
+  final String avatar;
+
+  UserModel({this.id, this.createdAt, this.name, this.avatar});
+
+  @override
+  String toString() => name;
+
+  @override
+  operator ==(o) => o is UserModel && o.id == id;
+
+  @override
+  int get hashCode => id.hashCode^name.hashCode^createdAt.hashCode;
+
+}
+```
+
+
 ## Getting Started
 
 This project is a starting point for a Dart
