@@ -32,8 +32,8 @@ SelectDialog.showModal<String>(
 ```
 
 
-# Atenção
-Para utilizar um modelo como tipo de item, é necessário fazer as implementações de **toString**, **Equals** e **Hashcode**, conforme exemplo a seguir:
+# Attention
+To use a template as an item type, you need to implement **toString**, **equals** and **hashcode**, as shown below:
 
 ```dart
 class UserModel {
