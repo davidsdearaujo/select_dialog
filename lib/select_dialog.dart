@@ -9,6 +9,7 @@ typedef Widget SelectOneItemBuilderType<T>(
 class SelectDialog<T> extends StatefulWidget {
   final T selectedValue;
   final List<T> itemsList;
+  final bool showSearchBox;
   final void Function(T) onChange;
   final Future<List<T>> Function(String text) onFind;
   final SelectOneItemBuilderType<T> itemBuilder;
@@ -16,6 +17,7 @@ class SelectDialog<T> extends StatefulWidget {
   const SelectDialog({
     Key key,
     this.itemsList,
+    this.showSearchBox,
     this.onChange,
     this.selectedValue,
     this.onFind,
@@ -27,6 +29,7 @@ class SelectDialog<T> extends StatefulWidget {
     List<T> items,
     String label,
     T selectedValue,
+    bool showSearchBox,
     Future<List<T>> Function(String text) onFind,
     SelectOneItemBuilderType<T> itemBuilder,
     void Function(T) onChange,
@@ -41,6 +44,7 @@ class SelectDialog<T> extends StatefulWidget {
             itemsList: items,
             onChange: onChange,
             onFind: onFind,
+            showSearchBox: showSearchBox,
             itemBuilder: itemBuilder,
           ),
         );
@@ -78,7 +82,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
       height: MediaQuery.of(context).size.height * .7,
       child: Column(
         children: <Widget>[
-          Padding(
+          widget.showSearchBox ?? true ? Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               onChanged: bloc.onTextChanged,
@@ -87,7 +91,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 contentPadding: const EdgeInsets.all(2.0),
               ),
             ),
-          ),
+          ) : Container(),
           Expanded(
             child: Scrollbar(
               child: StreamBuilder<List<T>>(
