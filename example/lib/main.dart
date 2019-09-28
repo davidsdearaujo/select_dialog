@@ -13,9 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: MyHomePage(),
     );
   }
@@ -35,10 +33,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final modelItems = List.generate(
     50,
     (index) => UserModel(
-        avatar: "https://i.imgur.com/lTy4hiN.jpg",
-        name: "Deivão $index",
-        id: "$index",
-        createdAt: DateTime.now()),
+      avatar: "https://i.imgur.com/lTy4hiN.jpg",
+      name: "Deivão $index",
+      id: "$index",
+      createdAt: DateTime.now(),
+    ),
   );
 
   @override

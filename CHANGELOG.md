@@ -1,4 +1,8 @@
-## [1.0.0+6] - 2019.09.28
+## [1.0.6+1] - 2019.09.28
+
+* Common fix
+
+## [1.0.6] - 2019.09.28
 
 * Added searchBoxDecoration property
 

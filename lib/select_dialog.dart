@@ -35,7 +35,7 @@ class SelectDialog<T> extends StatefulWidget {
     Future<List<T>> Function(String text) onFind,
     SelectOneItemBuilderType<T> itemBuilder,
     void Function(T) onChange,
-    InputDecoration boxDecoration,
+    InputDecoration searchBoxDecoration,
   }) {
     return showDialog(
       context: context,
@@ -49,6 +49,7 @@ class SelectDialog<T> extends StatefulWidget {
             onFind: onFind,
             showSearchBox: showSearchBox,
             itemBuilder: itemBuilder,
+            searchBoxDecoration: searchBoxDecoration,
           ),
         );
       },
