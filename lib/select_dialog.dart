@@ -13,6 +13,7 @@ class SelectDialog<T> extends StatefulWidget {
   final void Function(T) onChange;
   final Future<List<T>> Function(String text) onFind;
   final SelectOneItemBuilderType<T> itemBuilder;
+  final InputDecoration searchBoxDecoration;
 
   const SelectDialog({
     Key key,
@@ -22,6 +23,7 @@ class SelectDialog<T> extends StatefulWidget {
     this.selectedValue,
     this.onFind,
     this.itemBuilder,
+    this.searchBoxDecoration,
   }) : super(key: key);
 
   static Future<T> showModal<T>(
@@ -33,6 +35,7 @@ class SelectDialog<T> extends StatefulWidget {
     Future<List<T>> Function(String text) onFind,
     SelectOneItemBuilderType<T> itemBuilder,
     void Function(T) onChange,
+    InputDecoration boxDecoration,
   }) {
     return showDialog(
       context: context,
@@ -82,18 +85,18 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
       height: MediaQuery.of(context).size.height * .7,
       child: Column(
         children: <Widget>[
-          widget.showSearchBox ?? true
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    onChanged: bloc.onTextChanged,
-                    decoration: InputDecoration(
+          if (widget.showSearchBox ?? true)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: bloc.onTextChanged,
+                decoration: widget.searchBoxDecoration ??
+                    InputDecoration(
                       hintText: "Procurar",
                       contentPadding: const EdgeInsets.all(2.0),
                     ),
-                  ),
-                )
-              : Container(),
+              ),
+            ),
           Expanded(
             child: Scrollbar(
               child: StreamBuilder<List<T>>(
