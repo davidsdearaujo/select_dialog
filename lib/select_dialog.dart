@@ -82,16 +82,18 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
       height: MediaQuery.of(context).size.height * .7,
       child: Column(
         children: <Widget>[
-          widget.showSearchBox ?? true ? Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: bloc.onTextChanged,
-              decoration: InputDecoration(
-                hintText: "Procurar",
-                contentPadding: const EdgeInsets.all(2.0),
-              ),
-            ),
-          ) : Container(),
+          widget.showSearchBox ?? true
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: bloc.onTextChanged,
+                    decoration: InputDecoration(
+                      hintText: "Procurar",
+                      contentPadding: const EdgeInsets.all(2.0),
+                    ),
+                  ),
+                )
+              : Container(),
           Expanded(
             child: Scrollbar(
               child: StreamBuilder<List<T>>(
