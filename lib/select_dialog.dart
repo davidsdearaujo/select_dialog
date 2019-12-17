@@ -108,7 +108,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                   else if (!snapshot.hasData)
                     return Center(child: CircularProgressIndicator());
                   else if (snapshot.data.isEmpty)
-                    return Center(child: Text("No data found"));
+                    return Center(child: Text("Nenhum Item Encontrado."));
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
