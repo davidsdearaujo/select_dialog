@@ -5,24 +5,25 @@ class SelectOneBloc<T> {
   final _filter$ = BehaviorSubject.seeded("");
   BehaviorSubject<List<T>> _list$;
 
-  Observable<List<T>> filteredListOut;
-  Observable<List<T>> _filteredListOnlineOut;
-  Observable<List<T>> _filteredListOfflineOut;
+  Stream<List<T>> filteredListOut;
+  Stream<List<T>> _filteredListOnlineOut;
+  Stream<List<T>> _filteredListOfflineOut;
 
   SelectOneBloc(List<T> items, this.onFind) {
     _list$ = BehaviorSubject.seeded(items);
 
     _filteredListOfflineOut =
-        Observable.combineLatest2(_list$, _filter$, filter);
+        
+       CombineLatestStream.combine2(_list$, _filter$, filter);
 
     _filteredListOnlineOut = _filter$
         .where((_) => onFind != null)
         .distinct()
         .debounceTime(Duration(milliseconds: 500))
-        .switchMap((val) => Observable.fromFuture(onFind(val)).startWith(null));
+        .switchMap((val) => Stream.fromFuture(onFind(val)).startWith(null));
 
     filteredListOut =
-        Observable.merge([_filteredListOfflineOut, _filteredListOnlineOut]);
+        MergeStream([_filteredListOfflineOut, _filteredListOnlineOut]);
   }
 
   void onTextChanged(String filter) {
