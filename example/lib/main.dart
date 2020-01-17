@@ -57,8 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 SelectDialog.showModal<String>(
                   context,
                   label: "Simple Example",
+                  titleStyle: TextStyle(color: Colors.brown),
                   showSearchBox: false,
                   selectedValue: ex1,
+                  backgroundColor: Colors.grey,
                   items: List.generate(50, (index) => "Item $index"),
                   onChange: (String selected) {
                     setState(() {

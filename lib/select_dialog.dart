@@ -14,6 +14,8 @@ class SelectDialog<T> extends StatefulWidget {
   final Future<List<T>> Function(String text) onFind;
   final SelectOneItemBuilderType<T> itemBuilder;
   final InputDecoration searchBoxDecoration;
+  final Color backgroundColor;
+  final TextStyle titleStyle;
 
   const SelectDialog({
     Key key,
@@ -24,33 +26,40 @@ class SelectDialog<T> extends StatefulWidget {
     this.onFind,
     this.itemBuilder,
     this.searchBoxDecoration,
+    this.backgroundColor = Colors.white,
+    this.titleStyle,
   }) : super(key: key);
 
-  static Future<T> showModal<T>(
-    BuildContext context, {
-    List<T> items,
-    String label,
-    T selectedValue,
-    bool showSearchBox,
-    Future<List<T>> Function(String text) onFind,
-    SelectOneItemBuilderType<T> itemBuilder,
-    void Function(T) onChange,
-    InputDecoration searchBoxDecoration,
-  }) {
+  static Future<T> showModal<T>(BuildContext context,
+      {List<T> items,
+      String label,
+      T selectedValue,
+      bool showSearchBox,
+      Future<List<T>> Function(String text) onFind,
+      SelectOneItemBuilderType<T> itemBuilder,
+      void Function(T) onChange,
+      InputDecoration searchBoxDecoration,
+      Color backgroundColor,
+      TextStyle titleStyle}) {
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(label ?? ""),
-          content: SelectDialog<T>(
-            selectedValue: selectedValue,
-            itemsList: items,
-            onChange: onChange,
-            onFind: onFind,
-            showSearchBox: showSearchBox,
-            itemBuilder: itemBuilder,
-            searchBoxDecoration: searchBoxDecoration,
+          backgroundColor: backgroundColor,
+          title: Text(
+            label ?? "",
+            style: titleStyle,
           ),
+          content: SelectDialog<T>(
+              selectedValue: selectedValue,
+              itemsList: items,
+              onChange: onChange,
+              onFind: onFind,
+              showSearchBox: showSearchBox,
+              itemBuilder: itemBuilder,
+              searchBoxDecoration: searchBoxDecoration,
+              backgroundColor: backgroundColor,
+              titleStyle: titleStyle),
         );
       },
     );
