@@ -22,6 +22,12 @@ class UserModel {
     return list.map((item) => UserModel.fromJson(item)).toList();
   }
 
+  //this method will prevent the override of toString
+  static String userAsString(UserModel userModel){
+    return '#${userModel.id} ${userModel.name}';
+  }
+
+
   @override
   String toString() => name;
 
@@ -30,4 +36,5 @@ class UserModel {
 
   @override
   int get hashCode => id.hashCode ^ name.hashCode ^ createdAt.hashCode;
+
 }

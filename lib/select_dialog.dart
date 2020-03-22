@@ -3,8 +3,8 @@ library select_dialog;
 import 'package:flutter/material.dart';
 import 'select_bloc.dart';
 
-typedef Widget SelectOneItemBuilderType<T>(
-    BuildContext context, T item, bool isSelected);
+typedef Widget SelectOneItemBuilderType<T>(BuildContext context, T item,
+    bool isSelected);
 
 class SelectDialog<T> extends StatefulWidget {
   final T selectedValue;
@@ -16,6 +16,7 @@ class SelectDialog<T> extends StatefulWidget {
   final InputDecoration searchBoxDecoration;
   final Color backgroundColor;
   final TextStyle titleStyle;
+  final String Function(T item) itemAsString;
 
   const SelectDialog({
     Key key,
@@ -28,19 +29,21 @@ class SelectDialog<T> extends StatefulWidget {
     this.searchBoxDecoration,
     this.backgroundColor = Colors.white,
     this.titleStyle,
+    this.itemAsString
   }) : super(key: key);
 
   static Future<T> showModal<T>(BuildContext context,
       {List<T> items,
-      String label,
-      T selectedValue,
-      bool showSearchBox,
-      Future<List<T>> Function(String text) onFind,
-      SelectOneItemBuilderType<T> itemBuilder,
-      void Function(T) onChange,
-      InputDecoration searchBoxDecoration,
-      Color backgroundColor,
-      TextStyle titleStyle}) {
+        String label,
+        T selectedValue,
+        bool showSearchBox,
+        Future<List<T>> Function(String text) onFind,
+        String Function(T item) itemAsString,
+        SelectOneItemBuilderType<T> itemBuilder,
+        void Function(T) onChange,
+        InputDecoration searchBoxDecoration,
+        Color backgroundColor,
+        TextStyle titleStyle}) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -51,6 +54,7 @@ class SelectDialog<T> extends StatefulWidget {
             style: titleStyle,
           ),
           content: SelectDialog<T>(
+              itemAsString: itemAsString,
               selectedValue: selectedValue,
               itemsList: items,
               onChange: onChange,
@@ -74,11 +78,9 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
   SelectOneBloc<T> bloc;
   void Function(T) onChange;
 
-  _SelectDialogState(
-    List<T> itemsList,
-    this.onChange,
-    Future<List<T>> Function(String text) onFind,
-  ) {
+  _SelectDialogState(List<T> itemsList,
+      this.onChange,
+      Future<List<T>> Function(String text) onFind,) {
     bloc = SelectOneBloc(itemsList, onFind);
   }
 
@@ -91,8 +93,14 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .9,
-      height: MediaQuery.of(context).size.height * .7,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * .9,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * .7,
       child: Column(
         children: <Widget>[
           if (widget.showSearchBox ?? true)
@@ -133,7 +141,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                         );
                       else
                         return ListTile(
-                          title: Text(item.toString()),
+                          title: Text(widget.itemAsString !=null ? widget.itemAsString(item): item.toString()),
                           selected: item == widget.selectedValue,
                           onTap: () {
                             onChange(item);

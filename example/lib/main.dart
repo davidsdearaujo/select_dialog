@@ -29,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String ex2 = "Model Example";
   UserModel ex3 = UserModel(name: "Item Builder Example");
   UserModel ex4 = UserModel(name: "Online Example");
+  UserModel ex5 = UserModel(name: "Custom itemAsString");
 
   final modelItems = List.generate(
     50,
@@ -139,6 +140,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ),
+            RaisedButton(
+              child: Text(ex5.name),
+              onPressed: () {
+                SelectDialog.showModal<UserModel>(
+                  context,
+                  itemAsString: UserModel.userAsString,
+                  label: "Online Example with custom itemAsString",
+                  selectedValue: ex5,
+                  onFind: (String filter) => getData(filter),
+                  onChange: (UserModel selected) {
+                    setState(() {
+                      ex5 = selected;
+                    });
+                  },
+                );
+              },
+            )
           ],
         ),
       ),
