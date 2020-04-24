@@ -1,6 +1,6 @@
 name: select_dialog
 description: Package designed to select an item from a list, with the option to filter and even search the items online.
-version: 1.0.6+1
+version: 1.1.0
 author: Flutterando Team <david@flutterando.com.br>
 homepage: https://flutterando.com.br/
 git: https://github.com/davidsdearaujo/select_dialog
