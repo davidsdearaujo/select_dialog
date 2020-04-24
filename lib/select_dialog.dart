@@ -66,7 +66,7 @@ class SelectDialog<T> extends StatefulWidget {
     WidgetBuilder loadingBuilder,
     ErrorBuilderType errorBuilder,
     BoxConstraints constraints,
-    bool autofocus,
+    bool autofocus = false,
   }) {
     return showDialog(
       context: context,
@@ -117,7 +117,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (widget.autofocus) {
+    if (widget.autofocus ?? false) {
       FocusScope.of(context).requestFocus(bloc.focusNode);
     }
   }
