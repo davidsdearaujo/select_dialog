@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectOneBloc<T> {
   final Future<List<T>> Function(String text) onFind;
   final _filter$ = BehaviorSubject.seeded("");
+  final focusNode = FocusNode();
   BehaviorSubject<List<T>> _list$;
 
   Stream<List<T>> filteredListOut;
@@ -46,5 +48,6 @@ class SelectOneBloc<T> {
   void dispose() {
     _filter$.close();
     _list$.close();
+    focusNode.dispose();
   }
 }

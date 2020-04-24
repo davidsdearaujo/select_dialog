@@ -20,6 +20,7 @@ class SelectDialog<T> extends StatefulWidget {
   final WidgetBuilder emptyBuilder;
   final WidgetBuilder loadingBuilder;
   final ErrorBuilderType errorBuilder;
+  final bool autofocus;
 
   ///![image](https://user-images.githubusercontent.com/16373553/80187339-db365f00-85e5-11ea-81ad-df17d7e7034e.png)
   final InputDecoration searchBoxDecoration;
@@ -46,6 +47,7 @@ class SelectDialog<T> extends StatefulWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.constraints,
+    this.autofocus = false,
   }) : super(key: key);
 
   static Future<T> showModal<T>(
@@ -64,6 +66,7 @@ class SelectDialog<T> extends StatefulWidget {
     WidgetBuilder loadingBuilder,
     ErrorBuilderType errorBuilder,
     BoxConstraints constraints,
+    bool autofocus,
   }) {
     return showDialog(
       context: context,
@@ -87,6 +90,7 @@ class SelectDialog<T> extends StatefulWidget {
             loadingBuilder: loadingBuilder,
             errorBuilder: errorBuilder,
             constraints: constraints,
+            autofocus: autofocus,
           ),
         );
       },
@@ -111,9 +115,17 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.autofocus) {
+      FocusScope.of(context).requestFocus(bloc.focusNode);
+    }
+  }
+
+  @override
   void dispose() {
-    bloc.dispose();
     super.dispose();
+    bloc.dispose();
   }
 
   bool get isMobile =>
@@ -141,6 +153,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                focusNode: bloc.focusNode,
                 onChanged: bloc.onTextChanged,
                 decoration: widget.searchBoxDecoration ??
                     InputDecoration(
