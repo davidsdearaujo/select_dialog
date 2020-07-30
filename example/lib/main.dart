@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 SelectDialog.showModal<UserModel>(
                   context,
                   label: "Model Example",
+                  searchHint: "Example Hint",
                   items: modelItems,
                   onChange: (UserModel selected) {
                     setState(() {
