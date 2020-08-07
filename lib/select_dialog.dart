@@ -144,9 +144,8 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.7,
-      constraints: widget.constraints ?? isMobile
-          ? webDefaultConstraints
-          : mobileDefaultConstraints,
+      constraints: widget.constraints ??
+          (isMobile ? webDefaultConstraints : mobileDefaultConstraints),
       child: Column(
         children: <Widget>[
           if (widget.showSearchBox ?? true)
