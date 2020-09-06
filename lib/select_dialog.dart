@@ -22,6 +22,7 @@ class SelectDialog<T> extends StatefulWidget {
   final ErrorBuilderType errorBuilder;
   final bool autofocus;
   final bool alwaysShowScrollBar;
+  final int searchBoxMaxLines;
 
   ///![image](https://user-images.githubusercontent.com/16373553/80187339-db365f00-85e5-11ea-81ad-df17d7e7034e.png)
   final InputDecoration searchBoxDecoration;
@@ -53,8 +54,9 @@ class SelectDialog<T> extends StatefulWidget {
     this.constraints,
     this.autofocus = false,
     this.alwaysShowScrollBar = false,
-  }) : searchHint = searchHint ?? "Find",
-    super(key: key);
+    this.searchBoxMaxLines = 1,
+  })  : searchHint = searchHint ?? "Find",
+        super(key: key);
 
   static Future<T> showModal<T>(
     BuildContext context, {
@@ -66,7 +68,7 @@ class SelectDialog<T> extends StatefulWidget {
     SelectOneItemBuilderType<T> itemBuilder,
     void Function(T) onChange,
     InputDecoration searchBoxDecoration,
-    String searchHint = "Find",
+    String searchHint,
     Color backgroundColor,
     TextStyle titleStyle,
     WidgetBuilder emptyBuilder,
@@ -75,6 +77,7 @@ class SelectDialog<T> extends StatefulWidget {
     BoxConstraints constraints,
     bool autofocus = false,
     bool alwaysShowScrollBar = false,
+    int searchBoxMaxLines = 1,
   }) {
     return showDialog(
       context: context,
@@ -101,6 +104,7 @@ class SelectDialog<T> extends StatefulWidget {
             constraints: constraints,
             autofocus: autofocus,
             alwaysShowScrollBar: alwaysShowScrollBar,
+            searchBoxMaxLines: searchBoxMaxLines,
           ),
         );
       },
@@ -164,9 +168,10 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
               child: TextField(
                 focusNode: bloc.focusNode,
                 onChanged: bloc.onTextChanged,
+                maxLines: widget.searchBoxMaxLines,
                 decoration: widget.searchBoxDecoration ??
                     InputDecoration(
-                      hintText: widget.searchHint ?? "Find",
+                      hintText: widget.searchHint,
                       contentPadding: const EdgeInsets.all(2.0),
                     ),
               ),
