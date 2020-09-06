@@ -75,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   alwaysShowScrollBar: true,
                   label: "Model Example",
+                  searchHint: "Example Hint",
                   items: modelItems,
                   onChange: (UserModel selected) {
                     setState(() {

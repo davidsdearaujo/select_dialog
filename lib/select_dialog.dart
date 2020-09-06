@@ -26,6 +26,8 @@ class SelectDialog<T> extends StatefulWidget {
   ///![image](https://user-images.githubusercontent.com/16373553/80187339-db365f00-85e5-11ea-81ad-df17d7e7034e.png)
   final InputDecoration searchBoxDecoration;
 
+  final String searchHint;
+
   ///![image](https://user-images.githubusercontent.com/16373553/80187103-72e77d80-85e5-11ea-9349-e4dc8ec323bc.png)
   final TextStyle titleStyle;
 
@@ -43,6 +45,7 @@ class SelectDialog<T> extends StatefulWidget {
     this.onFind,
     this.itemBuilder,
     this.searchBoxDecoration,
+    String searchHint,
     this.titleStyle,
     this.emptyBuilder,
     this.errorBuilder,
@@ -50,7 +53,8 @@ class SelectDialog<T> extends StatefulWidget {
     this.constraints,
     this.autofocus = false,
     this.alwaysShowScrollBar = false,
-  }) : super(key: key);
+  }) : searchHint = searchHint ?? "Find",
+    super(key: key);
 
   static Future<T> showModal<T>(
     BuildContext context, {
@@ -62,6 +66,7 @@ class SelectDialog<T> extends StatefulWidget {
     SelectOneItemBuilderType<T> itemBuilder,
     void Function(T) onChange,
     InputDecoration searchBoxDecoration,
+    String searchHint = "Find",
     Color backgroundColor,
     TextStyle titleStyle,
     WidgetBuilder emptyBuilder,
@@ -88,6 +93,7 @@ class SelectDialog<T> extends StatefulWidget {
             showSearchBox: showSearchBox,
             itemBuilder: itemBuilder,
             searchBoxDecoration: searchBoxDecoration,
+            searchHint: searchHint,
             titleStyle: titleStyle,
             emptyBuilder: emptyBuilder,
             loadingBuilder: loadingBuilder,
@@ -160,7 +166,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 onChanged: bloc.onTextChanged,
                 decoration: widget.searchBoxDecoration ??
                     InputDecoration(
-                      hintText: "Find",
+                      hintText: widget.searchHint ?? "Find",
                       contentPadding: const EdgeInsets.all(2.0),
                     ),
               ),
