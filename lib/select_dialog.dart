@@ -21,6 +21,7 @@ class SelectDialog<T> extends StatefulWidget {
   final WidgetBuilder loadingBuilder;
   final ErrorBuilderType errorBuilder;
   final bool autofocus;
+  final bool alwaysShowScrollBar;
 
   ///![image](https://user-images.githubusercontent.com/16373553/80187339-db365f00-85e5-11ea-81ad-df17d7e7034e.png)
   final InputDecoration searchBoxDecoration;
@@ -51,6 +52,7 @@ class SelectDialog<T> extends StatefulWidget {
     this.loadingBuilder,
     this.constraints,
     this.autofocus = false,
+    this.alwaysShowScrollBar = false,
   }) : searchHint = searchHint ?? "Find",
     super(key: key);
 
@@ -72,6 +74,7 @@ class SelectDialog<T> extends StatefulWidget {
     ErrorBuilderType errorBuilder,
     BoxConstraints constraints,
     bool autofocus = false,
+    bool alwaysShowScrollBar = false,
   }) {
     return showDialog(
       context: context,
@@ -97,6 +100,7 @@ class SelectDialog<T> extends StatefulWidget {
             errorBuilder: errorBuilder,
             constraints: constraints,
             autofocus: autofocus,
+            alwaysShowScrollBar: alwaysShowScrollBar,
           ),
         );
       },
@@ -150,9 +154,8 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.7,
-      constraints: widget.constraints ?? isMobile
-          ? webDefaultConstraints
-          : mobileDefaultConstraints,
+      constraints: widget.constraints ??
+          (isMobile ? webDefaultConstraints : mobileDefaultConstraints),
       child: Column(
         children: <Widget>[
           if (widget.showSearchBox ?? true)
@@ -192,32 +195,35 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                       return Center(child: Text("No data found"));
                     }
                   }
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      var item = snapshot.data[index];
-                      if (widget.itemBuilder != null)
-                        return InkWell(
-                          child: widget.itemBuilder(
-                            context,
-                            item,
-                            item == widget.selectedValue,
-                          ),
-                          onTap: () {
-                            onChange(item);
-                            Navigator.pop(context);
-                          },
-                        );
-                      else
-                        return ListTile(
-                          title: Text(item.toString()),
-                          selected: item == widget.selectedValue,
-                          onTap: () {
-                            onChange(item);
-                            Navigator.pop(context);
-                          },
-                        );
-                    },
+                  return Scrollbar(
+                    isAlwaysShown: widget.alwaysShowScrollBar,
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        var item = snapshot.data[index];
+                        if (widget.itemBuilder != null)
+                          return InkWell(
+                            child: widget.itemBuilder(
+                              context,
+                              item,
+                              item == widget.selectedValue,
+                            ),
+                            onTap: () {
+                              onChange(item);
+                              Navigator.pop(context);
+                            },
+                          );
+                        else
+                          return ListTile(
+                            title: Text(item.toString()),
+                            selected: item == widget.selectedValue,
+                            onTap: () {
+                              onChange(item);
+                              Navigator.pop(context);
+                            },
+                          );
+                      },
+                    ),
                   );
                 },
               ),

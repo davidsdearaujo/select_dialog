@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:select_dialog/select_dialog.dart';
@@ -75,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 SelectDialog.showModal<UserModel>(
                   context,
+                  alwaysShowScrollBar: true,
                   label: "Model Example",
                   searchHint: "Example Hint",
                   items: modelItems,
