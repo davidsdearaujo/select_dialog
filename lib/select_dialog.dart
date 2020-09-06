@@ -44,14 +44,15 @@ class SelectDialog<T> extends StatefulWidget {
     this.onFind,
     this.itemBuilder,
     this.searchBoxDecoration,
-    this.searchHint,
+    String searchHint,
     this.titleStyle,
     this.emptyBuilder,
     this.errorBuilder,
     this.loadingBuilder,
     this.constraints,
     this.autofocus = false,
-  }) : super(key: key);
+  }) : searchHint = searchHint ?? "Find",
+    super(key: key);
 
   static Future<T> showModal<T>(
     BuildContext context, {
@@ -63,7 +64,7 @@ class SelectDialog<T> extends StatefulWidget {
     SelectOneItemBuilderType<T> itemBuilder,
     void Function(T) onChange,
     InputDecoration searchBoxDecoration,
-    String searchHint,
+    String searchHint = "Find",
     Color backgroundColor,
     TextStyle titleStyle,
     WidgetBuilder emptyBuilder,
