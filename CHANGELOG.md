@@ -1,3 +1,10 @@
+# [1.2.0] - 2020.09.06
+## Rx dart 0.24.x bump
+## Implemented properties
+ - searchBoxMaxLines
+ - searchBoxMinLines
+ - searchHint
+
 # [1.1.0] - 2020.04.24
 ## Added web size adaptation
 ![image](https://user-images.githubusercontent.com/16373553/80187452-0b7dfd80-85e6-11ea-9a8a-f9ff4c1092d9.png)
