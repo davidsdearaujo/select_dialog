@@ -23,6 +23,7 @@ class SelectDialog<T> extends StatefulWidget {
   final bool autofocus;
   final bool alwaysShowScrollBar;
   final int searchBoxMaxLines;
+  final int searchBoxMinLines;
 
   ///![image](https://user-images.githubusercontent.com/16373553/80187339-db365f00-85e5-11ea-81ad-df17d7e7034e.png)
   final InputDecoration searchBoxDecoration;
@@ -55,6 +56,7 @@ class SelectDialog<T> extends StatefulWidget {
     this.autofocus = false,
     this.alwaysShowScrollBar = false,
     this.searchBoxMaxLines = 1,
+    this.searchBoxMinLines = 1,
   })  : searchHint = searchHint ?? "Find",
         super(key: key);
 
@@ -78,6 +80,7 @@ class SelectDialog<T> extends StatefulWidget {
     bool autofocus = false,
     bool alwaysShowScrollBar = false,
     int searchBoxMaxLines = 1,
+    int searchBoxMinLines = 1,
   }) {
     return showDialog(
       context: context,
@@ -105,6 +108,7 @@ class SelectDialog<T> extends StatefulWidget {
             autofocus: autofocus,
             alwaysShowScrollBar: alwaysShowScrollBar,
             searchBoxMaxLines: searchBoxMaxLines,
+            searchBoxMinLines: searchBoxMinLines,
           ),
         );
       },
@@ -169,6 +173,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 focusNode: bloc.focusNode,
                 onChanged: bloc.onTextChanged,
                 maxLines: widget.searchBoxMaxLines,
+                minLines: widget.searchBoxMinLines,
                 decoration: widget.searchBoxDecoration ??
                     InputDecoration(
                       hintText: widget.searchHint,
