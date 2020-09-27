@@ -146,7 +146,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     bloc.dispose();
   }
 
-  bool get isMobile =>
+  bool get isWeb =>
       MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
 
   BoxConstraints get webDefaultConstraints =>
@@ -163,7 +163,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.7,
       constraints: widget.constraints ??
-          (isMobile ? webDefaultConstraints : mobileDefaultConstraints),
+          (isWeb ? webDefaultConstraints : mobileDefaultConstraints),
       child: Column(
         children: <Widget>[
           if (widget.showSearchBox ?? true)
