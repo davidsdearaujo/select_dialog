@@ -50,5 +50,6 @@ class SelectOneBloc<T> {
     _filter$.close();
     _list$.close();
     focusNode.dispose();
+    scrollController.dispose();
   }
 }
