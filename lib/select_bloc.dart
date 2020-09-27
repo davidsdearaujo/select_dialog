@@ -5,6 +5,7 @@ class SelectOneBloc<T> {
   final Future<List<T>> Function(String text) onFind;
   final _filter$ = BehaviorSubject.seeded("");
   final focusNode = FocusNode();
+  final scrollController = ScrollController();
   BehaviorSubject<List<T>> _list$;
 
   Stream<List<T>> filteredListOut;

@@ -1,3 +1,6 @@
+# [1.2.1] - 2020.09.27
+## Implemented multiple select items
+
 # [1.2.0] - 2020.09.06
 ## Rx dart 0.24.x bump
 ## Implemented properties

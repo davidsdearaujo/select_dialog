@@ -2,7 +2,7 @@
 
 Package designed to select an item from a list, with the option to filter and even search the items online.
 
-<img src="https://github.com/davidsdearaujo/select_dialog/blob/master/screenshots/Screenshot_1.png?raw=true" width="49.5%" /> <img src="https://github.com/davidsdearaujo/select_dialog/blob/master/screenshots/Screenshot_2.png?raw=true" width="49.5%" />
+<img src="https://user-images.githubusercontent.com/16373553/94357714-95d4fc80-0071-11eb-8b99-9cff034a1ece.png" width="49.5%" /> <img src="https://user-images.githubusercontent.com/16373553/94357674-4098eb00-0071-11eb-8985-45edf99b9812.png" width="49.5%" />
 
 ## pubspec.yaml
 ```yaml
@@ -14,7 +14,7 @@ select_dialog: <last version>
 import 'package:select_dialog/select_dialog.dart';
 ```
 
-## simple example
+## Simple example
 ```dart
 String ex1 = "No value selected";
 
@@ -30,6 +30,25 @@ SelectDialog.showModal<String>(
   },
 );
 ```
+
+## Multiple items select
+```dart
+List<String> ex5 = [];
+
+SelectDialog.showModal<String>(
+  context,
+  label: "Multiple Items Example",
+  multipleSelectedValues: ex5,
+  items: List.generate(50, (index) => "Item $index"),
+  onMultipleItemsChange: (List<String> selected) {
+    setState(() {
+      ex5 = selected;
+    });
+  },
+); 
+```
+
+### [MORE EXAMPLES](https://github.com/davidsdearaujo/select_dialog/tree/master/example)
 
 
 # Attention
