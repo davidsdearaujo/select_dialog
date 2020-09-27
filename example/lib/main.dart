@@ -27,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String ex2 = "Model Example";
   UserModel ex3 = UserModel(name: "Item Builder Example");
   UserModel ex4 = UserModel(name: "Online Example");
+  List<String> ex5 = [];
 
   final modelItems = List.generate(
     50,
@@ -58,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   titleStyle: TextStyle(color: Colors.brown),
                   showSearchBox: false,
                   selectedValue: ex1,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.amber,
                   items: List.generate(50, (index) => "Item $index"),
                   onChange: (String selected) {
                     setState(() {
@@ -135,6 +136,41 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       ex4 = selected;
                     });
+                  },
+                );
+              },
+            ),
+            RaisedButton(
+              child: Text(
+                ex5.isEmpty ? "Multiple Items Example" : ex5.join(", "),
+              ),
+              onPressed: () {
+                SelectDialog.showModal<String>(
+                  context,
+                  label: "Multiple Items Example",
+                  multipleSelectedValues: ex5,
+                  items: List.generate(50, (index) => "Item $index"),
+                  itemBuilder: (context, item, isSelected){
+                    return ListTile(
+                      trailing: isSelected ? Icon(Icons.check) : null,
+                      title: Text(item),
+                      selected: isSelected,
+                    );
+                  },
+                  onMultipleItemsChange: (List<String> selected) {
+                    setState(() {
+                      ex5 = selected;
+                    });
+                  },
+                  okButtonBuilder: (context, onPressed) {
+                    return Align(
+                      alignment: Alignment.centerRight,
+                      child: FloatingActionButton(
+                        onPressed: onPressed,
+                        child: Icon(Icons.check),
+                        mini: true,
+                      ),
+                    );
                   },
                 );
               },
