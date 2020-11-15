@@ -30,7 +30,7 @@ class SelectOneBloc<T> {
   }
 
   void onTextChanged(String filter) {
-    _filter$.add(filter ?? "".toLowerCase());
+    _filter$.add(filter?.toLowerCase() ?? "".toLowerCase());
   }
 
   List<T> filter(List<T> list, String filter) {
