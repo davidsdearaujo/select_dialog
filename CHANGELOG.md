@@ -1,3 +1,6 @@
+# [1.2.3] - 2021.01.05
+## Added findController parameter to change onFind text by programmatically
+
 # [1.2.1] - 2020.09.27
 ## Implemented multiple select items
 
