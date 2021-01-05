@@ -28,6 +28,8 @@ class _MyHomePageState extends State<MyHomePage> {
   UserModel ex3 = UserModel(name: "Item Builder Example");
   UserModel ex4 = UserModel(name: "Online Example");
   List<String> ex5 = [];
+  String ex6 = "Find Controller Example";
+  final ex6Controller = TextEditingController(text: "20");
 
   final modelItems = List.generate(
     50,
@@ -45,137 +47,157 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text("Select Dialog Example"),
       ),
-      body: Container(
-        padding: EdgeInsets.all(25),
-        width: double.infinity,
-        child: Column(
-          children: <Widget>[
-            RaisedButton(
-              child: Text(ex1),
-              onPressed: () {
-                SelectDialog.showModal<String>(
-                  context,
-                  label: "Simple Example",
-                  titleStyle: TextStyle(color: Colors.brown),
-                  showSearchBox: false,
-                  selectedValue: ex1,
-                  backgroundColor: Colors.amber,
-                  items: List.generate(50, (index) => "Item $index"),
-                  onChange: (String selected) {
-                    setState(() {
-                      ex1 = selected;
-                    });
-                  },
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(ex2),
-              onPressed: () {
-                SelectDialog.showModal<UserModel>(
-                  context,
-                  alwaysShowScrollBar: true,
-                  label: "Model Example",
-                  searchHint: "Example Hint",
-                  items: modelItems,
-                  onChange: (UserModel selected) {
-                    setState(() {
-                      ex2 = selected.name;
-                    });
-                  },
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(ex3.name),
-              onPressed: () {
-                SelectDialog.showModal<UserModel>(
-                  context,
-                  label: "Item Builder Example",
-                  items: modelItems,
-                  selectedValue: ex3,
-                  itemBuilder:
-                      (BuildContext context, UserModel item, bool isSelected) {
-                    return Container(
-                      decoration: !isSelected
-                          ? null
-                          : BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(item.avatar),
-                        ),
-                        selected: isSelected,
-                        title: Text(item.name),
-                        subtitle: Text(item.createdAt.toString()),
-                      ),
-                    );
-                  },
-                  onChange: (selected) {
-                    setState(() {
-                      ex3 = selected;
-                    });
-                  },
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(ex4.name),
-              onPressed: () {
-                SelectDialog.showModal<UserModel>(
-                  context,
-                  label: "Online Example",
-                  selectedValue: ex4,
-                  onFind: (String filter) => getData(filter),
-                  onChange: (UserModel selected) {
-                    setState(() {
-                      ex4 = selected;
-                    });
-                  },
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(
-                ex5.isEmpty ? "Multiple Items Example" : ex5.join(", "),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(25),
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              RaisedButton(
+                child: Text(ex1),
+                onPressed: () {
+                  SelectDialog.showModal<String>(
+                    context,
+                    label: "Simple Example",
+                    titleStyle: TextStyle(color: Colors.brown),
+                    showSearchBox: false,
+                    selectedValue: ex1,
+                    backgroundColor: Colors.amber,
+                    items: List.generate(50, (index) => "Item $index"),
+                    onChange: (String selected) {
+                      setState(() {
+                        ex1 = selected;
+                      });
+                    },
+                  );
+                },
               ),
-              onPressed: () {
-                SelectDialog.showModal<String>(
-                  context,
-                  label: "Multiple Items Example",
-                  multipleSelectedValues: ex5,
-                  items: List.generate(50, (index) => "Item $index"),
-                  itemBuilder: (context, item, isSelected){
-                    return ListTile(
-                      trailing: isSelected ? Icon(Icons.check) : null,
-                      title: Text(item),
-                      selected: isSelected,
-                    );
-                  },
-                  onMultipleItemsChange: (List<String> selected) {
-                    setState(() {
-                      ex5 = selected;
-                    });
-                  },
-                  okButtonBuilder: (context, onPressed) {
-                    return Align(
-                      alignment: Alignment.centerRight,
-                      child: FloatingActionButton(
-                        onPressed: onPressed,
-                        child: Icon(Icons.check),
-                        mini: true,
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+              RaisedButton(
+                child: Text(ex2),
+                onPressed: () {
+                  SelectDialog.showModal<UserModel>(
+                    context,
+                    alwaysShowScrollBar: true,
+                    label: "Model Example",
+                    searchHint: "Example Hint",
+                    items: modelItems,
+                    onChange: (UserModel selected) {
+                      setState(() {
+                        ex2 = selected.name;
+                      });
+                    },
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text(ex3.name),
+                onPressed: () {
+                  SelectDialog.showModal<UserModel>(
+                    context,
+                    label: "Item Builder Example",
+                    items: modelItems,
+                    selectedValue: ex3,
+                    itemBuilder:
+                        (BuildContext context, UserModel item, bool isSelected) {
+                      return Container(
+                        decoration: !isSelected
+                            ? null
+                            : BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(item.avatar),
+                          ),
+                          selected: isSelected,
+                          title: Text(item.name),
+                          subtitle: Text(item.createdAt.toString()),
+                        ),
+                      );
+                    },
+                    onChange: (selected) {
+                      setState(() {
+                        ex3 = selected;
+                      });
+                    },
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text(ex4.name),
+                onPressed: () {
+                  SelectDialog.showModal<UserModel>(
+                    context,
+                    label: "Online Example",
+                    selectedValue: ex4,
+                    onFind: (String filter) => getData(filter),
+                    onChange: (UserModel selected) {
+                      setState(() {
+                        ex4 = selected;
+                      });
+                    },
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text(
+                  ex5.isEmpty ? "Multiple Items Example" : ex5.join(", "),
+                ),
+                onPressed: () {
+                  SelectDialog.showModal<String>(
+                    context,
+                    label: "Multiple Items Example",
+                    multipleSelectedValues: ex5,
+                    items: List.generate(50, (index) => "Item $index"),
+                    itemBuilder: (context, item, isSelected) {
+                      return ListTile(
+                        trailing: isSelected ? Icon(Icons.check) : null,
+                        title: Text(item),
+                        selected: isSelected,
+                      );
+                    },
+                    onMultipleItemsChange: (List<String> selected) {
+                      setState(() {
+                        ex5 = selected;
+                      });
+                    },
+                    okButtonBuilder: (context, onPressed) {
+                      return Align(
+                        alignment: Alignment.centerRight,
+                        child: FloatingActionButton(
+                          onPressed: onPressed,
+                          child: Icon(Icons.check),
+                          mini: true,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text(ex6),
+                onPressed: () {
+                  SelectDialog.showModal<UserModel>(
+                    context,
+                    findController: ex6Controller,
+                    alwaysShowScrollBar: true,
+                    label: "Scroll Controller Example",
+                    searchHint: "Example Hint",
+                    items: modelItems,
+                    onChange: (UserModel selected) {
+                      setState(() {
+                        ex6 = selected.name;
+                      });
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

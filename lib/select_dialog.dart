@@ -24,6 +24,7 @@ class SelectDialog<T> extends StatefulWidget {
   final SelectOneItemBuilderType<T> itemBuilder;
   final WidgetBuilder emptyBuilder;
   final WidgetBuilder loadingBuilder;
+
   ///![image](https://user-images.githubusercontent.com/16373553/94357272-d599e500-006d-11eb-9bcb-5f067943011e.png)
   final ButtonBuilderType okButtonBuilder;
   final ErrorBuilderType errorBuilder;
@@ -44,6 +45,7 @@ class SelectDialog<T> extends StatefulWidget {
   ///|---|---|
   ///|![image](https://user-images.githubusercontent.com/16373553/80189438-0a020480-85e9-11ea-8e63-3fabfa42c1c7.png)|![image](https://user-images.githubusercontent.com/16373553/80190562-e2ac3700-85ea-11ea-82ef-3383ae32ab02.png)|
   final BoxConstraints constraints;
+  final TextEditingController findController;
 
   const SelectDialog({
     Key key,
@@ -67,6 +69,7 @@ class SelectDialog<T> extends StatefulWidget {
     bool alwaysShowScrollBar,
     this.searchBoxMaxLines = 1,
     this.searchBoxMinLines = 1,
+    this.findController,
   })  : searchHint = searchHint ?? "Find",
         alwaysShowScrollBar = alwaysShowScrollBar ?? false,
         super(key: key);
@@ -95,6 +98,7 @@ class SelectDialog<T> extends StatefulWidget {
     bool alwaysShowScrollBar = false,
     int searchBoxMaxLines = 1,
     int searchBoxMinLines = 1,
+    TextEditingController findController,
   }) {
     return showDialog(
       context: context,
@@ -126,6 +130,7 @@ class SelectDialog<T> extends StatefulWidget {
             alwaysShowScrollBar: alwaysShowScrollBar,
             searchBoxMaxLines: searchBoxMaxLines,
             searchBoxMinLines: searchBoxMinLines,
+            findController: findController,
           ),
         );
       },
@@ -139,6 +144,7 @@ class SelectDialog<T> extends StatefulWidget {
         onMultipleItemsChange,
         multipleSelectedValues?.toList(),
         onFind,
+        findController,
       );
 }
 
@@ -153,8 +159,9 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     void Function(List<T>) onMultipleItemsChange,
     List<T> multipleSelectedValues,
     Future<List<T>> Function(String text) onFind,
+    TextEditingController findController,
   ) {
-    bloc = SelectOneBloc(itemsList, onFind);
+    bloc = SelectOneBloc(itemsList, onFind, findController);
     multipleItemsBloc = MultipleItemsBloc(
       multipleSelectedValues,
       onMultipleItemsChange,
@@ -217,8 +224,8 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: bloc.findController,
                 focusNode: bloc.focusNode,
-                onChanged: bloc.onTextChanged,
                 maxLines: widget.searchBoxMaxLines,
                 minLines: widget.searchBoxMinLines,
                 decoration: widget.searchBoxDecoration ??
@@ -229,62 +236,61 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
               ),
             ),
           Expanded(
-            child: Scrollbar(
-              child: StreamBuilder<List<T>>(
-                stream: bloc.filteredListOut,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    if (widget.errorBuilder != null) {
-                      return widget.errorBuilder(context, snapshot.error);
-                    } else {
-                      return Center(child: Text("Oops. \n${snapshot.error}"));
-                    }
-                  } else if (!snapshot.hasData) {
-                    if (widget.loadingBuilder != null) {
-                      return widget.loadingBuilder(context);
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  } else if (snapshot.data.isEmpty) {
-                    if (widget.emptyBuilder != null) {
-                      return widget.emptyBuilder(context);
-                    } else {
-                      return Center(child: Text("No data found"));
-                    }
+            child: StreamBuilder<List<T>>(
+              stream: bloc.filteredListOut,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  if (widget.errorBuilder != null) {
+                    return widget.errorBuilder(context, snapshot.error);
+                  } else {
+                    return Center(child: Text("Oops. \n${snapshot.error}"));
                   }
-                  return Scrollbar(
+                } else if (!snapshot.hasData) {
+                  if (widget.loadingBuilder != null) {
+                    return widget.loadingBuilder(context);
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                } else if (snapshot.data.isEmpty) {
+                  if (widget.emptyBuilder != null) {
+                    return widget.emptyBuilder(context);
+                  } else {
+                    return Center(child: Text("No data found"));
+                  }
+                }
+                return Scrollbar(
+                  controller: bloc.scrollController,
+                  isAlwaysShown: widget.alwaysShowScrollBar,
+                  child: ListView.builder(
                     controller: bloc.scrollController,
-                    isAlwaysShown: widget.alwaysShowScrollBar,
-                    child: ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        var item = snapshot.data[index];
-                        bool isSelected =
-                            multipleItemsBloc.selectedItems?.contains(item) ??
-                                false;
-                        isSelected = isSelected || item == widget.selectedValue;
-                        return InkWell(
-                          child: itemBuilder(context, item, isSelected),
-                          onTap: () {
-                            if (isMultipleItems) {
-                              setState(() {
-                                if (isSelected) {
-                                  multipleItemsBloc.unselectItem(item);
-                                } else {
-                                  multipleItemsBloc.selectItem(item);
-                                }
-                              });
-                            } else {
-                              onChange?.call(item);
-                              Navigator.pop(context);
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      var item = snapshot.data[index];
+                      bool isSelected =
+                          multipleItemsBloc.selectedItems?.contains(item) ??
+                              false;
+                      isSelected = isSelected || item == widget.selectedValue;
+                      return InkWell(
+                        child: itemBuilder(context, item, isSelected),
+                        onTap: () {
+                          if (isMultipleItems) {
+                            setState(() {
+                              if (isSelected) {
+                                multipleItemsBloc.unselectItem(item);
+                              } else {
+                                multipleItemsBloc.selectItem(item);
+                              }
+                            });
+                          } else {
+                            onChange?.call(item);
+                            Navigator.pop(context);
+                          }
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
           if (isMultipleItems)

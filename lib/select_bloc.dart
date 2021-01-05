@@ -6,18 +6,19 @@ class SelectOneBloc<T> {
   final _filter$ = BehaviorSubject.seeded("");
   final focusNode = FocusNode();
   final scrollController = ScrollController();
+  TextEditingController findController;
   BehaviorSubject<List<T>> _list$;
 
   Stream<List<T>> filteredListOut;
   Stream<List<T>> _filteredListOnlineOut;
   Stream<List<T>> _filteredListOfflineOut;
 
-  SelectOneBloc(List<T> items, this.onFind) {
+  SelectOneBloc(List<T> items, this.onFind, this.findController) {
+    if (findController == null) findController = TextEditingController();
     _list$ = BehaviorSubject.seeded(items);
 
     _filteredListOfflineOut =
-        
-       CombineLatestStream.combine2(_list$, _filter$, filter);
+        CombineLatestStream.combine2(_list$, _filter$, filter);
 
     _filteredListOnlineOut = _filter$
         .where((_) => onFind != null)
@@ -27,10 +28,13 @@ class SelectOneBloc<T> {
 
     filteredListOut =
         MergeStream([_filteredListOfflineOut, _filteredListOnlineOut]);
+
+    findController.addListener(() => onTextChanged(findController.text));
+    onTextChanged(findController.text);
   }
 
   void onTextChanged(String filter) {
-    _filter$.add(filter?.toLowerCase() ?? "".toLowerCase());
+    _filter$.add(filter?.toLowerCase() ?? "");
   }
 
   List<T> filter(List<T> list, String filter) {
