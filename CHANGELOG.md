@@ -1,6 +1,7 @@
 # [2.0.0] - 2021.03.09
 ## Migrated to NullSafety
 [More](https://events.flutter.dev/?gclid=Cj0KCQiAs5eCBhCBARIsAEhk4r75svPADe_vO0swK7h6UH92TloC8E_SZQJu_bLO78VqPo1nsS-RrngaAnhoEALw_wcB&gclsrc=aw.ds)
+Following the Flutter 2.0, this package has been migrated to Null Safety
 ## Removed rxdart dependency.
 Now, the content from rxdart is migrated to local, on the folder rxdart. 
 This prevents incompatibilities between the version of rxdart in the project and the package.
