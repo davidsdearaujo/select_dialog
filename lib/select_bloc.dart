@@ -1,51 +1,40 @@
 import 'package:flutter/cupertino.dart';
-import 'package:rxdart/rxdart.dart';
+
+import 'rxdart.dart';
 
 class SelectOneBloc<T> {
-  final Future<List<T>> Function(String text) onFind;
   final _filter$ = BehaviorSubject.seeded("");
   final focusNode = FocusNode();
   final scrollController = ScrollController();
-  TextEditingController findController;
-  BehaviorSubject<List<T>> _list$;
+  late TextEditingController findController;
+  late BehaviorSubject<List<T>?> _list$;
 
-  Stream<List<T>> filteredListOut;
-  Stream<List<T>> _filteredListOnlineOut;
-  Stream<List<T>> _filteredListOfflineOut;
+  late Stream<List<T>?> filteredListOut;
+  late Stream<List<T>?> _filteredListOnlineOut;
+  late Stream<List<T>?> _filteredListOfflineOut;
+  String get filterValue => _filter$.value ?? "";
 
-  SelectOneBloc(List<T> items, this.onFind, this.findController) {
-    if (findController == null) findController = TextEditingController();
+  SelectOneBloc(List<T>? items, Future<List<T>?> Function(String text)? onFind, TextEditingController? findController) {
+    this.findController = findController ?? TextEditingController();
     _list$ = BehaviorSubject.seeded(items);
 
-    _filteredListOfflineOut =
-        CombineLatestStream.combine2(_list$, _filter$, filter);
+    _filteredListOfflineOut = CombineLatestStream.combine2(_list$, _filter$, filter);
+    _filteredListOnlineOut = _filter$.where((_) => onFind != null).distinct().debounceTime(Duration(milliseconds: 500)).switchMap((val) => Stream.fromFuture(onFind!(val)).startWith(null));
+    filteredListOut = MergeStream([
+      _filteredListOfflineOut,
+      _filteredListOnlineOut
+    ]);
 
-    _filteredListOnlineOut = _filter$
-        .where((_) => onFind != null)
-        .distinct()
-        .debounceTime(Duration(milliseconds: 500))
-        .switchMap((val) => Stream.fromFuture(onFind(val)).startWith(null));
-
-    filteredListOut =
-        MergeStream([_filteredListOfflineOut, _filteredListOnlineOut]);
-
-    findController.addListener(() => onTextChanged(findController.text));
-    onTextChanged(findController.text);
+    this.findController.addListener(() => onTextChanged(this.findController.text));
+    onTextChanged(this.findController.text);
   }
 
   void onTextChanged(String filter) {
-    _filter$.add(filter?.toLowerCase() ?? "");
+    _filter$.add(filter.toLowerCase());
   }
 
-  List<T> filter(List<T> list, String filter) {
-    return list
-        ?.where(
-          (item) =>
-              _filter$.value == null ||
-              item.toString().toLowerCase().contains(_filter$.value) ||
-              _filter$.value.isEmpty,
-        )
-        ?.toList();
+  List<T>? filter(List<T>? list, String filter) {
+    return list?.where((item) => _filter$.value == null || item.toString().toLowerCase().contains(filterValue) || filterValue.isEmpty).toList();
   }
 
   // bool isFiltered(T item, String filter)

@@ -23,12 +23,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String ex1 = "Simple Example";
-  String ex2 = "Model Example";
-  UserModel ex3 = UserModel(name: "Item Builder Example");
-  UserModel ex4 = UserModel(name: "Online Example");
+  String? ex1;
+  String? ex2;
+  UserModel? ex3;
+  UserModel? ex4;
   List<String> ex5 = [];
-  String ex6 = "Find Controller Example";
+  String? ex6;
   final ex6Controller = TextEditingController(text: "20");
 
   final modelItems = List.generate(
@@ -44,17 +44,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Select Dialog Example"),
-      ),
+      appBar: AppBar(title: Text("Select Dialog Example")),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(25),
           width: double.infinity,
           child: Column(
             children: <Widget>[
-              RaisedButton(
-                child: Text(ex1),
+              ElevatedButton(
+                child: Text(ex1 ?? "Simple Example"),
                 onPressed: () {
                   SelectDialog.showModal<String>(
                     context,
@@ -72,14 +70,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-              RaisedButton(
-                child: Text(ex2),
+              ElevatedButton(
+                child: Text(ex2 ?? "Model Example"),
                 onPressed: () {
                   SelectDialog.showModal<UserModel>(
                     context,
                     alwaysShowScrollBar: true,
                     label: "Model Example",
-                    searchHint: "Example Hint",
+                    searchBoxDecoration: InputDecoration(hintText: "Example Hint"),
                     items: modelItems,
                     onChange: (UserModel selected) {
                       setState(() {
@@ -89,30 +87,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-              RaisedButton(
-                child: Text(ex3.name),
+              ElevatedButton(
+                child: Text(ex3?.name ?? "Item Builder Example"),
                 onPressed: () {
                   SelectDialog.showModal<UserModel>(
                     context,
                     label: "Item Builder Example",
                     items: modelItems,
                     selectedValue: ex3,
-                    itemBuilder:
-                        (BuildContext context, UserModel item, bool isSelected) {
+                    itemBuilder: (BuildContext context, UserModel item, bool isSelected) {
                       return Container(
                         decoration: !isSelected
                             ? null
                             : BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 color: Colors.white,
-                                border: Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                                border: Border.all(color: Theme.of(context).primaryColor),
                               ),
                         child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(item.avatar),
-                          ),
+                          leading: CircleAvatar(backgroundImage: item.avatar == null ? null : NetworkImage(item.avatar!)),
                           selected: isSelected,
                           title: Text(item.name),
                           subtitle: Text(item.createdAt.toString()),
@@ -127,8 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-              RaisedButton(
-                child: Text(ex4.name),
+              ElevatedButton(
+                child: Text(ex4?.name ?? "Online Example"),
                 onPressed: () {
                   SelectDialog.showModal<UserModel>(
                     context,
@@ -143,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text(
                   ex5.isEmpty ? "Multiple Items Example" : ex5.join(", "),
                 ),
@@ -178,15 +171,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-              RaisedButton(
-                child: Text(ex6),
+              ElevatedButton(
+                child: Text(ex6 ?? "Find Controller Example"),
                 onPressed: () {
                   SelectDialog.showModal<UserModel>(
                     context,
                     findController: ex6Controller,
                     alwaysShowScrollBar: true,
                     label: "Scroll Controller Example",
-                    searchHint: "Example Hint",
+                    searchBoxDecoration: InputDecoration(hintText: "Example Hint"),
                     items: modelItems,
                     onChange: (UserModel selected) {
                       setState(() {
@@ -203,10 +196,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<List<UserModel>> getData(filter) async {
+  Future<List<UserModel>> getData(String filter) async {
     var response = await Dio().get(
       "http://5d85ccfb1e61af001471bf60.mockapi.io/user",
-      queryParameters: {"filter": filter},
+      queryParameters: {
+        "filter": filter
+      },
     );
 
     var models = UserModel.fromJsonList(response.data);

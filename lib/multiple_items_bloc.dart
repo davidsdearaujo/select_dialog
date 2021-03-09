@@ -1,13 +1,13 @@
 class MultipleItemsBloc<T> {
-  final void Function(List<T>) onMultipleItemsChange;
+  final void Function(List<T>)? onMultipleItemsChange;
   MultipleItemsBloc(
-    List<T> initialSelectedItems,
+    List<T>? initialSelectedItems,
     this.onMultipleItemsChange,
   ) {
     selectedItems = initialSelectedItems ?? <T>[];
   }
 
-  List<T> selectedItems;
+  late List<T> selectedItems;
 
   void selectItem(T item) {
     if (!selectedItems.contains(item)) selectedItems.add(item);

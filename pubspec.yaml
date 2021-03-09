@@ -1,22 +1,21 @@
 name: select_dialog
 description: Package designed to select an item from a list, with the option to filter and even search the items online.
-version: 1.2.4
+version: 2.0.0
 author: Flutterando Team <david@flutterando.com.br>
 homepage: https://flutterando.com.br/
 git: https://github.com/davidsdearaujo/select_dialog
 repository: https://github.com/davidsdearaujo/select_dialog
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.0.0 <3.0.0"
 
 dependencies:
-  rxdart: ">=0.23.0 <0.25.0"
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  test: ^1.16.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

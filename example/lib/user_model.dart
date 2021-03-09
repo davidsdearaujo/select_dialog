@@ -1,29 +1,26 @@
 class UserModel {
-  final String id;
-  final DateTime createdAt;
+  final String? id;
+  final DateTime? createdAt;
   final String name;
-  final String avatar;
+  final String? avatar;
 
-  UserModel({this.id, this.createdAt, this.name, this.avatar});
+  UserModel({this.id, this.createdAt, required this.name, this.avatar});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    if (json == null) return null;
     return UserModel(
       id: json["id"],
-      createdAt:
-          json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+      createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
       name: json["name"],
       avatar: json["avatar"],
     );
   }
 
   static List<UserModel> fromJsonList(List list) {
-    if (list == null) return null;
     return list.map((item) => UserModel.fromJson(item)).toList();
   }
 
   @override
-  String toString() => name;
+  String toString() => "$name";
 
   @override
   operator ==(o) => o is UserModel && o.id == id;
