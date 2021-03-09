@@ -6,6 +6,7 @@ Package designed to select an item from a list, with the option to filter and ev
 
 ## Versions
 **Non Null Safety Version**: 1.2.3 or less
+
 **Null Safety Version**: 2.0.0 or more
 
 ## pubspec.yaml
