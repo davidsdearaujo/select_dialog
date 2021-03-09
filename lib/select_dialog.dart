@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'multiple_items_bloc.dart';
 import 'select_bloc.dart';
 
-typedef Widget SelectOneItemBuilderType<T>(
-    BuildContext context, T item, bool isSelected);
+typedef Widget SelectOneItemBuilderType<T>(BuildContext context, T item, bool isSelected);
 
 typedef Widget ErrorBuilderType<T>(BuildContext context, dynamic exception);
 typedef Widget ButtonBuilderType(BuildContext context, VoidCallback onPressed);
@@ -99,9 +98,11 @@ class SelectDialog<T> extends StatefulWidget {
     int searchBoxMaxLines = 1,
     int searchBoxMinLines = 1,
     TextEditingController findController,
+    bool useRootNavigator = false,
   }) {
     return showDialog(
       context: context,
+      useRootNavigator: useRootNavigator,
       builder: (context) {
         return AlertDialog(
           backgroundColor: backgroundColor,
@@ -182,13 +183,11 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     bloc.dispose();
   }
 
-  bool get isWeb =>
-      MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
+  bool get isWeb => MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
 
   bool get isMultipleItems => widget.onMultipleItemsChange != null;
 
-  BoxConstraints get webDefaultConstraints =>
-      BoxConstraints(maxWidth: 250, maxHeight: 500);
+  BoxConstraints get webDefaultConstraints => BoxConstraints(maxWidth: 250, maxHeight: 500);
 
   BoxConstraints get mobileDefaultConstraints => BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width * 0.9,
@@ -216,8 +215,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.7,
-      constraints: widget.constraints ??
-          (isWeb ? webDefaultConstraints : mobileDefaultConstraints),
+      constraints: widget.constraints ?? (isWeb ? webDefaultConstraints : mobileDefaultConstraints),
       child: Column(
         children: <Widget>[
           if (widget.showSearchBox ?? true)
@@ -266,9 +264,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
                       var item = snapshot.data[index];
-                      bool isSelected =
-                          multipleItemsBloc.selectedItems?.contains(item) ??
-                              false;
+                      bool isSelected = multipleItemsBloc.selectedItems?.contains(item) ?? false;
                       isSelected = isSelected || item == widget.selectedValue;
                       return InkWell(
                         child: itemBuilder(context, item, isSelected),
