@@ -20,4 +20,9 @@ class MultipleItemsBloc<T> {
   void onSelectButtonPressed() {
     onMultipleItemsChange?.call(selectedItems);
   }
+
+  void resetItems() {
+    selectedItems.clear();
+    this.onSelectButtonPressed();
+  }
 }
