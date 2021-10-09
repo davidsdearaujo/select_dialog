@@ -196,8 +196,11 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
 
   SelectOneItemBuilderType<T> get itemBuilder =>
       widget.itemBuilder ??
-      (context, item, isSelected) =>
-          ListTile(title: Text(item.toString()), selected: isSelected);
+      (context, item, isSelected) => ListTile(
+            title: Text(item.toString()),
+            selected: isSelected,
+            trailing: isSelected ? Icon(Icons.done) : null,
+          );
 
   ButtonBuilderType get okButtonBuilder =>
       widget.okButtonBuilder ??
@@ -206,7 +209,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
 
   ButtonBuilderType get resetButtonBuilder =>
       (context, onPressed) => ElevatedButton(
-          child: Text("Reset All"),
+          child: Text("Reset All (${multipleItemsBloc.selectedItems.length})"),
           onPressed:
               (multipleItemsBloc.selectedItems.isEmpty) ? null : onPressed);
 
