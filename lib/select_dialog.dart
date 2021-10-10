@@ -207,11 +207,23 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
       (context, onPressed) =>
           ElevatedButton(child: Text("Ok"), onPressed: onPressed);
 
-  ButtonBuilderType get resetButtonBuilder =>
-      (context, onPressed) => ElevatedButton(
-          child: Text("Reset All (${multipleItemsBloc.selectedItems.length})"),
-          onPressed:
-              (multipleItemsBloc.selectedItems.isEmpty) ? null : onPressed);
+  ButtonBuilderType get resetButtonBuilder => (context, onPressed) =>
+      ElevatedButton(
+        child: Text("Reset All (${multipleItemsBloc.selectedItems.length})"),
+        onPressed: (multipleItemsBloc.selectedItems.isEmpty) ? null : onPressed,
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.pressed))
+                return Theme.of(context).colorScheme.error.withOpacity(0.5);
+              else if (states.contains(MaterialState.disabled)) return null;
+              return Theme.of(context)
+                  .colorScheme
+                  .error; // Use the component's default.
+            },
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
