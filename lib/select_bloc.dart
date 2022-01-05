@@ -29,10 +29,19 @@ class SelectOneBloc<T> {
     onTextChanged(this.findController.text);
   }
 
+  String _lastFilter = '';
   void onTextChanged(String filter) {
+    if(filter.isEmpty && _lastFilter.isNotEmpty){
+      _lastFilter = filter;
+      _filter$.add(filter.toLowerCase());
+    }
+    if(filter.isEmpty||filter==_lastFilter){
+      return;
+    }
+    _lastFilter = filter;
     _filter$.add(filter.toLowerCase());
   }
-
+  
   List<T>? filter(List<T>? list, String filter) {
     return list?.where((item) => _filter$.value == null || item.toString().toLowerCase().contains(filterValue) || filterValue.isEmpty).toList();
   }
