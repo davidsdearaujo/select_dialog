@@ -15,7 +15,7 @@ class SelectDialog<T> extends StatefulWidget {
   final List<T>? multipleSelectedValues;
   final List<T>? itemsList;
 
-  ///![image](https://user-images.githubusercontent.com/16373553/80187339-db365f00-85e5-11ea-81ad-df17d7e7034e.png)
+  ///![image](https://user-images.githubusercontent.com/16373553/80187339-db365f00-85e5-11ea-81ad-df17d7e7034e.png) r
   final bool showSearchBox;
   final void Function(T)? onChange;
   final void Function(List<T>)? onMultipleItemsChange;
