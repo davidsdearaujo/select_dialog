@@ -215,7 +215,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 }
                 return Scrollbar(
                   controller: bloc.scrollController,
-                  isAlwaysShown: widget.alwaysShowScrollBar,
+                  thumbVisibility: widget.alwaysShowScrollBar,
                   child: ListView.builder(
                     controller: bloc.scrollController,
                     itemCount: snapshot.data!.length,
