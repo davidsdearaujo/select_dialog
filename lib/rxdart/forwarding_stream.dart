@@ -8,8 +8,7 @@ import 'subject.dart';
 /// to a new [StreamController].
 /// It captures events such as onListen, onPause, onResume and onCancel,
 /// which can be used in pair with a [ForwardingSink]
-Stream<R> forwardStream<T, R>(
-    Stream<T> stream, ForwardingSink<T, R> connectedSink) {
+Stream<R> forwardStream<T, R>(Stream<T> stream, ForwardingSink<T, R> connectedSink) {
   ArgumentError.checkNotNull(stream, 'stream');
   ArgumentError.checkNotNull(connectedSink, 'connectedSink');
 
@@ -29,8 +28,7 @@ Stream<R> forwardStream<T, R>(
 
     subscription = stream.listen(
       (data) => runCatching(() => connectedSink.add(controller, data)),
-      onError: (Object e, StackTrace? st) =>
-          runCatching(() => connectedSink.addError(controller, e, st)),
+      onError: (Object e, StackTrace? st) => runCatching(() => connectedSink.addError(controller, e, st)),
       onDone: () => runCatching(() => connectedSink.close(controller)),
     );
   };
@@ -39,7 +37,7 @@ Stream<R> forwardStream<T, R>(
     final onCancelSelfFuture = subscription.cancel();
     final onCancelConnectedFuture = connectedSink.onCancel(controller);
     final futures = <Future>[
-      if (onCancelSelfFuture is Future) onCancelSelfFuture,
+      onCancelSelfFuture,
       if (onCancelConnectedFuture is Future) onCancelConnectedFuture,
     ];
     return Future.wait<dynamic>(futures);

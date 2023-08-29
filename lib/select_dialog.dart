@@ -179,9 +179,13 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
         maxHeight: MediaQuery.of(context).size.height * 0.7,
       );
 
-  SelectOneItemBuilderType<T> get itemBuilder => widget.itemBuilder ?? (context, item, isSelected) => ListTile(title: Text(item.toString()), selected: isSelected);
+  SelectOneItemBuilderType<T> get itemBuilder {
+    return widget.itemBuilder ?? (context, item, isSelected) => ListTile(title: Text(item.toString()), selected: isSelected);
+  }
 
-  ButtonBuilderType get okButtonBuilder => widget.okButtonBuilder ?? (context, onPressed) => ElevatedButton(child: Text("Ok"), onPressed: onPressed);
+  ButtonBuilderType get okButtonBuilder {
+    return widget.okButtonBuilder ?? (context, onPressed) => ElevatedButton(child: Text("Ok"), onPressed: onPressed);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +203,8 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 focusNode: bloc.focusNode,
                 maxLines: widget.searchBoxMaxLines,
                 minLines: widget.searchBoxMinLines,
-                decoration: widget.searchBoxDecoration?.copyWith(hintText: widget.searchHint ?? widget.searchBoxDecoration!.hintText) ?? InputDecoration(hintText: widget.searchHint ?? "Find", contentPadding: const EdgeInsets.all(2.0)),
+                decoration: widget.searchBoxDecoration?.copyWith(hintText: widget.searchBoxDecoration?.hintText ?? widget.searchBoxDecoration!.hintText) ?? //
+                    InputDecoration(hintText: widget.searchBoxDecoration?.hintText ?? "Find", contentPadding: const EdgeInsets.all(2.0)),
               ),
             ),
           Expanded(
