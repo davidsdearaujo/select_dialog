@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   SelectDialog.showModal<String>(
                     context,
-                    label: "Simple Example",
+                    label: Text("Select Dialog Example"),
                     titleStyle: TextStyle(color: Colors.brown),
                     showSearchBox: false,
                     selectedValue: ex1,
@@ -76,8 +76,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   SelectDialog.showModal<UserModel>(
                     context,
                     alwaysShowScrollBar: true,
-                    label: "Model Example",
-                    searchBoxDecoration: InputDecoration(hintText: "Example Hint"),
+                    label: Text("Model Example"),
+                    searchBoxDecoration:
+                        InputDecoration(hintText: "Example Hint"),
                     items: modelItems,
                     onChange: (UserModel selected) {
                       setState(() {
@@ -92,20 +93,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   SelectDialog.showModal<UserModel>(
                     context,
-                    label: "Item Builder Example",
+                    label: Text("Item Builder Example"),
                     items: modelItems,
                     selectedValue: ex3,
-                    itemBuilder: (BuildContext context, UserModel item, bool isSelected) {
+                    itemBuilder: (BuildContext context, UserModel item,
+                        bool isSelected) {
                       return Container(
                         decoration: !isSelected
                             ? null
                             : BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 color: Colors.white,
-                                border: Border.all(color: Theme.of(context).primaryColor),
+                                border: Border.all(
+                                    color: Theme.of(context).primaryColor),
                               ),
                         child: ListTile(
-                          leading: CircleAvatar(backgroundImage: item.avatar == null ? null : NetworkImage(item.avatar!)),
+                          leading: CircleAvatar(
+                              backgroundImage: item.avatar == null
+                                  ? null
+                                  : NetworkImage(item.avatar!)),
                           selected: isSelected,
                           title: Text(item.name),
                           subtitle: Text(item.createdAt.toString()),
@@ -125,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   SelectDialog.showModal<UserModel>(
                     context,
-                    label: "Online Example",
+                    label: Text("Online Example"),
                     selectedValue: ex4,
                     onFind: (String filter) => getData(filter),
                     onChange: (UserModel selected) {
@@ -143,7 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   SelectDialog.showModal<String>(
                     context,
-                    label: "Multiple Items Example",
+                    label: Text(
+                      "Multiple Items Example",
+                    ),
                     multipleSelectedValues: ex5,
                     items: List.generate(50, (index) => "Item $index"),
                     itemBuilder: (context, item, isSelected) {
@@ -178,8 +186,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     context,
                     findController: ex6Controller,
                     alwaysShowScrollBar: true,
-                    label: "Scroll Controller Example",
-                    searchBoxDecoration: InputDecoration(hintText: "Example Hint"),
+                    label: Text(
+                      "Scroll Controller Example",
+                    ),
+                    searchBoxDecoration:
+                        InputDecoration(hintText: "Example Hint"),
                     items: modelItems,
                     onChange: (UserModel selected) {
                       setState(() {
@@ -199,9 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<UserModel>> getData(String filter) async {
     var response = await Dio().get(
       "http://5d85ccfb1e61af001471bf60.mockapi.io/user",
-      queryParameters: {
-        "filter": filter
-      },
+      queryParameters: {"filter": filter},
     );
 
     var models = UserModel.fromJsonList(response.data);

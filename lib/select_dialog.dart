@@ -74,7 +74,7 @@ class SelectDialog<T> extends StatefulWidget {
   static Future<T?> showModal<T>(
     BuildContext context, {
     List<T>? items,
-    String? label,
+    Widget? label,
     T? selectedValue,
     List<T>? multipleSelectedValues,
     bool showSearchBox = true,
@@ -104,7 +104,7 @@ class SelectDialog<T> extends StatefulWidget {
       builder: (context) {
         return AlertDialog(
           backgroundColor: backgroundColor,
-          title: Text(label ?? "", style: titleStyle),
+          title: label,
           content: SelectDialog<T>(
             selectedValue: selectedValue,
             multipleSelectedValues: multipleSelectedValues,
