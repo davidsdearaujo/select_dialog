@@ -78,6 +78,7 @@ class SelectDialog<T> extends StatefulWidget {
     BuildContext context, {
     List<T>? items,
     String? label,
+    Widget? customLabel,
     T? selectedValue,
     List<T>? multipleSelectedValues,
     bool showSearchBox = true,
@@ -109,7 +110,7 @@ class SelectDialog<T> extends StatefulWidget {
       builder: (context) {
         return AlertDialog(
           backgroundColor: backgroundColor,
-          title: Text(label ?? "", style: titleStyle),
+          title: (customLabel == null) ?  Text(label ?? "", style: titleStyle) : customLabel,
           content: SelectDialog<T>(
             selectedValue: selectedValue,
             multipleSelectedValues: multipleSelectedValues,
