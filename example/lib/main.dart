@@ -77,7 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     context,
                     alwaysShowScrollBar: true,
                     label: "Model Example",
-                    searchBoxDecoration: InputDecoration(hintText: "Example Hint"),
+                    searchBoxDecoration:
+                        InputDecoration(hintText: "Example Hint"),
                     items: modelItems,
                     onChange: (UserModel selected) {
                       setState(() {
@@ -95,17 +96,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: "Item Builder Example",
                     items: modelItems,
                     selectedValue: ex3,
-                    itemBuilder: (BuildContext context, UserModel item, bool isSelected) {
+                    itemBuilder: (BuildContext context, UserModel item,
+                        bool isSelected) {
                       return Container(
                         decoration: !isSelected
                             ? null
                             : BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 color: Colors.white,
-                                border: Border.all(color: Theme.of(context).primaryColor),
+                                border: Border.all(
+                                    color: Theme.of(context).primaryColor),
                               ),
                         child: ListTile(
-                          leading: CircleAvatar(backgroundImage: item.avatar == null ? null : NetworkImage(item.avatar!)),
+                          leading: CircleAvatar(
+                              backgroundImage: item.avatar == null
+                                  ? null
+                                  : NetworkImage(item.avatar!)),
                           selected: isSelected,
                           title: Text(item.name),
                           subtitle: Text(item.createdAt.toString()),
@@ -179,11 +185,41 @@ class _MyHomePageState extends State<MyHomePage> {
                     findController: ex6Controller,
                     alwaysShowScrollBar: true,
                     label: "Scroll Controller Example",
-                    searchBoxDecoration: InputDecoration(hintText: "Example Hint"),
+                    searchBoxDecoration:
+                        InputDecoration(hintText: "Example Hint"),
                     items: modelItems,
                     onChange: (UserModel selected) {
                       setState(() {
                         ex6 = selected.name;
+                      });
+                    },
+                  );
+                },
+              ),
+              ElevatedButton(
+                child: Text(ex4?.name ?? "Custom Label Example"),
+                onPressed: () {
+                  SelectDialog.showModal<UserModel>(
+                    context,
+                    label: "Custom Label Example",
+                    customLabel: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Custom Label Example",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        Icon(Icons.info)
+                      ],
+                    ),
+                    selectedValue: ex4,
+                    onFind: (String filter) => getData(filter),
+                    onChange: (UserModel selected) {
+                      setState(() {
+                        ex4 = selected;
                       });
                     },
                   );
@@ -199,9 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<UserModel>> getData(String filter) async {
     var response = await Dio().get(
       "http://5d85ccfb1e61af001471bf60.mockapi.io/user",
-      queryParameters: {
-        "filter": filter
-      },
+      queryParameters: {"filter": filter},
     );
 
     var models = UserModel.fromJsonList(response.data);
