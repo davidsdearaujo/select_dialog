@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'multiple_items_bloc.dart';
 import 'select_bloc.dart';
 
-typedef Widget SelectOneItemBuilderType<T>(
-    BuildContext context, T item, bool isSelected);
+typedef Widget SelectOneItemBuilderType<T>(BuildContext context, T item, bool isSelected);
 
 typedef Widget ErrorBuilderType<T>(BuildContext context, dynamic exception);
 typedef Widget ButtonBuilderType(BuildContext context, VoidCallback onPressed);
@@ -77,7 +76,7 @@ class SelectDialog<T> extends StatefulWidget {
   static Future<T?> showModal<T>(
     BuildContext context, {
     List<T>? items,
-    String? label,
+    Object? label,
     T? selectedValue,
     List<T>? multipleSelectedValues,
     bool showSearchBox = true,
@@ -86,10 +85,9 @@ class SelectDialog<T> extends StatefulWidget {
     void Function(T)? onChange,
     void Function(List<T>)? onMultipleItemsChange,
     InputDecoration? searchBoxDecoration,
-    @Deprecated("Use 'hintText' property from searchBoxDecoration")
-        String? searchHint,
+    @Deprecated("Use 'hintText' property from searchBoxDecoration") String? searchHint,
     Color? backgroundColor,
-    TextStyle? titleStyle,
+    @Deprecated("Use a 'Text' widget instead of 'String' at 'label' field") TextStyle? titleStyle,
     WidgetBuilder? emptyBuilder,
     ButtonBuilderType? okButtonBuilder,
     WidgetBuilder? loadingBuilder,
@@ -103,13 +101,20 @@ class SelectDialog<T> extends StatefulWidget {
     bool useRootNavigator = false,
     bool showSelectedItemsFirst = false,
   }) {
+    Widget? labelWidget;
+    if (label is Widget) {
+      labelWidget = label;
+    } else if (label is Widget) {
+      labelWidget = Text(label as String, style: titleStyle);
+    }
+
     return showDialog<T>(
       context: context,
       useRootNavigator: useRootNavigator,
       builder: (context) {
         return AlertDialog(
           backgroundColor: backgroundColor,
-          title: Text(label ?? "", style: titleStyle),
+          title: labelWidget,
           content: SelectDialog<T>(
             selectedValue: selectedValue,
             multipleSelectedValues: multipleSelectedValues,
@@ -141,12 +146,7 @@ class SelectDialog<T> extends StatefulWidget {
 
   @override
   _SelectDialogState<T> createState() => _SelectDialogState<T>(
-      itemsList,
-      onChange,
-      onMultipleItemsChange,
-      multipleSelectedValues?.toList(),
-      onFind,
-      findController);
+      itemsList, onChange, onMultipleItemsChange, multipleSelectedValues?.toList(), onFind, findController);
 }
 
 class _SelectDialogState<T> extends State<SelectDialog<T>> {
@@ -162,8 +162,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
       Future<List<T>> Function(String text)? onFind,
       TextEditingController? findController) {
     bloc = SelectOneBloc(itemsList, onFind, findController);
-    multipleItemsBloc =
-        MultipleItemsBloc(multipleSelectedValues, onMultipleItemsChange);
+    multipleItemsBloc = MultipleItemsBloc(multipleSelectedValues, onMultipleItemsChange);
   }
 
   @override
@@ -180,23 +179,21 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     bloc.dispose();
   }
 
-  bool get isWeb =>
-      MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
+  bool get isWeb => MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
 
   bool get isMultipleItems => widget.onMultipleItemsChange != null;
   bool get showSelectedItemsFirst => widget.showSelectedItemsFirst;
 
-  BoxConstraints get webDefaultConstraints =>
-      BoxConstraints(maxWidth: 250, maxHeight: 500);
+  BoxConstraints get webDefaultConstraints => BoxConstraints(maxWidth: 250, maxHeight: 500);
 
   BoxConstraints get mobileDefaultConstraints => BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width * 0.9,
         maxHeight: MediaQuery.of(context).size.height * 0.7,
       );
 
-
   SelectOneItemBuilderType<T> get itemBuilder {
-    return widget.itemBuilder ?? (context, item, isSelected) => ListTile(title: Text(item.toString()), selected: isSelected);
+    return widget.itemBuilder ??
+        (context, item, isSelected) => ListTile(title: Text(item.toString()), selected: isSelected);
   }
 
   ButtonBuilderType get okButtonBuilder {
@@ -208,8 +205,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.7,
-      constraints: widget.constraints ??
-          (isWeb ? webDefaultConstraints : mobileDefaultConstraints),
+      constraints: widget.constraints ?? (isWeb ? webDefaultConstraints : mobileDefaultConstraints),
       child: Column(
         children: <Widget>[
           if (widget.showSearchBox)
@@ -232,11 +228,9 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                   return widget.errorBuilder?.call(context, snapshot.error) ??
                       Center(child: Text("Oops. \n${snapshot.error}"));
                 } else if (!snapshot.hasData) {
-                  return widget.loadingBuilder?.call(context) ??
-                      Center(child: CircularProgressIndicator());
+                  return widget.loadingBuilder?.call(context) ?? Center(child: CircularProgressIndicator());
                 } else if (snapshot.data!.isEmpty) {
-                  return widget.emptyBuilder?.call(context) ??
-                      Center(child: Text("No data found"));
+                  return widget.emptyBuilder?.call(context) ?? Center(child: Text("No data found"));
                 }
                 List<T> itemsList = [];
                 if (showSelectedItemsFirst) {
@@ -258,8 +252,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                     itemCount: itemsList.length,
                     itemBuilder: (context, index) {
                       var item = itemsList[index];
-                      bool isSelected =
-                          multipleItemsBloc.selectedItems.contains(item);
+                      bool isSelected = multipleItemsBloc.selectedItems.contains(item);
                       isSelected = isSelected || item == widget.selectedValue;
                       return InkWell(
                         child: itemBuilder(context, item, isSelected),

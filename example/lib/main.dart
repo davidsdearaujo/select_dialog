@@ -29,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   UserModel? ex4;
   List<String> ex5 = [];
   String? ex6;
+  UserModel? ex7;
   final ex6Controller = TextEditingController(text: "20");
 
   final modelItems = List.generate(
@@ -70,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+              SizedBox(height: 15),
               ElevatedButton(
                 child: Text(ex2 ?? "Model Example"),
                 onPressed: () {
@@ -87,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+              SizedBox(height: 15),
               ElevatedButton(
                 child: Text(ex3?.name ?? "Item Builder Example"),
                 onPressed: () {
@@ -105,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 border: Border.all(color: Theme.of(context).primaryColor),
                               ),
                         child: ListTile(
-                          leading: CircleAvatar(backgroundImage: item.avatar == null ? null : NetworkImage(item.avatar!)),
+                          leading:
+                              CircleAvatar(backgroundImage: item.avatar == null ? null : NetworkImage(item.avatar!)),
                           selected: isSelected,
                           title: Text(item.name),
                           subtitle: Text(item.createdAt.toString()),
@@ -120,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+              SizedBox(height: 15),
               ElevatedButton(
                 child: Text(ex4?.name ?? "Online Example"),
                 onPressed: () {
@@ -136,10 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+              SizedBox(height: 15),
               ElevatedButton(
-                child: Text(
-                  ex5.isEmpty ? "Multiple Items Example" : ex5.join(", "),
-                ),
+                child: Text(ex5.isEmpty ? "Multiple Items Example" : ex5.join(", ")),
                 onPressed: () {
                   SelectDialog.showModal<String>(
                     context,
@@ -171,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+              SizedBox(height: 15),
               ElevatedButton(
                 child: Text(ex6 ?? "Find Controller Example"),
                 onPressed: () {
@@ -189,6 +194,32 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+              SizedBox(height: 15),
+              ElevatedButton(
+                child: Text(ex7?.name ?? "Widget Label Example"),
+                onPressed: () {
+                  SelectDialog.showModal<UserModel>(
+                    context,
+                    label: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Custom Label Example",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        Icon(Icons.info)
+                      ],
+                    ),
+                    selectedValue: ex7,
+                    onFind: (String filter) => getData(filter),
+                    onChange: (UserModel selected) {
+                      setState(() {
+                        ex7 = selected;
+                      });
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -199,9 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<UserModel>> getData(String filter) async {
     var response = await Dio().get(
       "http://5d85ccfb1e61af001471bf60.mockapi.io/user",
-      queryParameters: {
-        "filter": filter
-      },
+      queryParameters: {"filter": filter},
     );
 
     var models = UserModel.fromJsonList(response.data);
