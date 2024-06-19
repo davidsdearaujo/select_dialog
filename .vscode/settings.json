@@ -1,4 +1,6 @@
 {
-    "dart.lineLength": 0,
-    "editor.rulers": []
+    "dart.lineLength": 120,
+    "editor.rulers": [
+        120
+    ]
 }
