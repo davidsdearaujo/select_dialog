@@ -1,5 +1,7 @@
 # [2.0.2] - 2023.08.29
-* Dialog Label: make it possible to use Widget (#53)
+* fix loading by @zlhz
+* Show selected item first by @domenicrz
+* Dialog Label: make it possible to use Widget by @davidsdearaujo
 
 # [2.0.1] - 2023.08.29
 * Flutter 3.13.0 compatibility
