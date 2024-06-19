@@ -1,3 +1,6 @@
+# [2.0.2] - 2024.06.19
+* Dialog Label: make it possible to use Widget (#53)
+
 # [2.0.1] - 2023.08.29
 * Flutter 3.13.0 compatibility
 
